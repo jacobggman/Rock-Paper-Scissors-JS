@@ -1,4 +1,4 @@
-let gameState = {
+let playerStats = {
     winStreak: 0,
     maxWinStreak: 0,
     wins: 0,
@@ -13,6 +13,15 @@ const WEAPON_WIN_CONDITIONS = {
     "paper": "rock"
 };
 
+window.onload = function() {
+    let loadedPlyaerStats = localStorage.getItem("player-stats");
+    if (loadedPlyaerStats)
+    {
+        playerStats = JSON.parse(loadedPlyaerStats);
+    }
+    updateDisplayStats();
+};
+
 function playGame(userChoice) {
     // Validate input
     if (!POSSIBLE_WEAPONS.includes(userChoice)) {
@@ -22,8 +31,9 @@ function playGame(userChoice) {
 
     const aiChoice = choose(POSSIBLE_WEAPONS);
     const result = determineGameResult(userChoice, aiChoice);
-    updateGameState(result);
-    updateDisplay(result, aiChoice);
+    updatePlayerStats(result);
+    updateDisplayGame(result, aiChoice);
+    localStorage.setItem("player-stats", JSON.stringify(playerStats));
 }
 
 function determineGameResult(userChoice, aiChoice) {
@@ -31,31 +41,35 @@ function determineGameResult(userChoice, aiChoice) {
     return WEAPON_WIN_CONDITIONS[userChoice] === aiChoice ? "win" : "lose";
 }
 
-function updateGameState(result) {
+function updatePlayerStats(result) {
     switch(result) {
         case "win":
-            gameState.winStreak++;
-            gameState.wins++;
-            gameState.maxWinStreak = Math.max(gameState.winStreak, gameState.maxWinStreak);
+            playerStats.winStreak++;
+            playerStats.wins++;
+            playerStats.maxWinStreak = Math.max(playerStats.winStreak, playerStats.maxWinStreak);
             break;
         case "lose":
-            gameState.winStreak = 0;
-            gameState.losses++;
+            playerStats.winStreak = 0;
+            playerStats.losses++;
             break;
         case "draw":
-            gameState.winStreak = 0;
-            gameState.draws++;
+            playerStats.winStreak = 0;
+            playerStats.draws++;
             break;
     }
 }
 
-function updateDisplay(result, aiChoice) {
+function updateDisplayGame(result, aiChoice) {
     document.getElementById("match-result-text").textContent = `You ${result.toUpperCase()}!`;
     document.getElementById("opponent-text").textContent = `Opponent chose ${aiChoice}`;
+    updateDisplayStats()
+}
+
+function updateDisplayStats() {
     document.getElementById("streak-text").textContent = 
-        `Win streak: ${gameState.winStreak} | Highest win streak: ${gameState.maxWinStreak}`;
+        `Win streak: ${playerStats.winStreak} | Highest win streak: ${playerStats.maxWinStreak}`;
     document.getElementById("score-text").textContent = 
-        `Wins: ${gameState.wins} | Losses: ${gameState.losses} | Draws: ${gameState.draws}`;
+        `Wins: ${playerStats.wins} | Losses: ${playerStats.losses} | Draws: ${playerStats.draws}`;
 }
 
 function choose(choices) {
