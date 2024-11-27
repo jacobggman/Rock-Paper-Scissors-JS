@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="source.js"></script>  
+    <title>Rock Paper Scissors</title>
+</head>
+<body>
+    <div style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
+        <div>
+            <h1>
+                Rock Paper Scissors Game!
+            </h1>
+            <h2>Pick your weapon</h2>
+            <button id="rock-button" onclick="onButtonClick(this.id)">
+                Rock
+            </button>
+            <button id="paper-button" onclick="onButtonClick(this.id)">
+                Paper
+            </button>
+            <button id="scissors-button" onclick="onButtonClick(this.id)">
+                Scissors
+            </button>
+            <h2 id="match-result-text"></h2>
+            <p id="opponent-text"></p>
+            <h3 id="streak-text">Win streak 0. Highest win streak: 0</h3>
+        </div>
+      </div>
+</body>
+</html>
